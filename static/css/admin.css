@@ -1,0 +1,145 @@
+/* Admin Dashboard Specific Styles */
+
+/* Sidebar */
+.admin-sidebar {
+    background: linear-gradient(180deg, #2c3e50 0%, #1a252f 100%);
+    min-height: 100vh;
+}
+
+.admin-sidebar .nav-link {
+    color: #ecf0f1;
+    padding: 12px 20px;
+    transition: all 0.3s;
+}
+
+.admin-sidebar .nav-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    padding-left: 25px;
+}
+
+.admin-sidebar .nav-link.active {
+    background: #3498db;
+    color: white;
+}
+
+.admin-sidebar .nav-link i {
+    width: 25px;
+    margin-right: 10px;
+}
+
+/* Stats Cards */
+.stat-card {
+    border-radius: 10px;
+    transition: transform 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-card .stat-icon {
+    font-size: 3rem;
+    opacity: 0.3;
+}
+
+.stat-card .stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+/* Tables */
+.admin-table {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.admin-table thead {
+    background: #34495e;
+    color: white;
+}
+
+.admin-table tbody tr:hover {
+    background: #ecf0f1;
+}
+
+/* Charts */
+.chart-container {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Model Performance */
+.model-card {
+    border-left: 4px solid;
+    margin-bottom: 20px;
+}
+
+.model-card.brain { border-left-color: #3498db; }
+.model-card.lung { border-left-color: #2ecc71; }
+.model-card.breast { border-left-color: #e74c3c; }
+
+.model-metrics {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.metric {
+    text-align: center;
+}
+
+.metric-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.metric-label {
+    font-size: 0.8rem;
+    color: #7f8c8d;
+}
+
+/* Progress Bars */
+.progress-custom {
+    height: 8px;
+    border-radius: 4px;
+    background: #ecf0f1;
+}
+
+.progress-custom .progress-bar {
+    border-radius: 4px;
+}
+
+/* User Management */
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #3498db;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .admin-sidebar {
+        position: fixed;
+        left: -250px;
+        transition: left 0.3s;
+        z-index: 1000;
+    }
+    
+    .admin-sidebar.show {
+        left: 0;
+    }
+    
+    .stat-card .stat-value {
+        font-size: 1.5rem;
+    }
+}

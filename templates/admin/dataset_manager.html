@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block title %}Dataset Manager{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">
+            <i class="fas fa-database"></i> Dataset Manager
+        </h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                <i class="fas fa-upload"></i> Upload Images
+            </button>
+        </div>
+    </div>
+    
+    <!-- Dataset Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h6 class="card-title">Total Images</h6>
+                    <h2 class="mb-0">{{ datasets|sum(attribute='total_images') }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h6 class="card-title">Training Images</h6>
+                    <h2 class="mb-0">{{ datasets|sum(attribute='train_count') }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <h6 class="card-title">Validation Images</h6>
+                    <h2 class="mb-0">{{ datasets|sum(attribute='validation_count') }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <h6 class="card-title">Test Images</h6>
+                    <h2 class="mb-0">{{ datasets|sum(attribute='test_count') }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Dataset Tables -->
+    {% for cancer_type in ['brain', 'lung', 'breast'] %}
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">{{ cancer_type|title }} Cancer Dataset</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Class</th>
+                            <th>Training</th>
+                            <th>Validation</th>
+                            <th>Test</th>
+                            <th>Total</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set classes = ['glioma', 'meningioma', 'pituitary', 'no_tumor'] if cancer_type == 'brain' else ['benign', 'malignant', 'normal'] %}
+                        {% for class_name in classes %}
+                        <tr>
+                            <td>{{ class_name|title }}</td>
+                            <td>
+                                <input type="number" class="form-control form-control-sm" value="0" style="width: 80px;">
+                            </td>
+                            <td>
+                                <input type="number" class="form-control form-control-sm" value="0" style="width: 80px;">
+                            </td>
+                            <td>
+                                <input type="number" class="form-control form-control-sm" value="0" style="width: 80px;">
+                            </td>
+                            <td>0</td>
+                            <td>
+                                <button class="btn btn-sm btn-info" onclick="viewImages('{{ cancer_type }}', '{{ class_name }}')">
+                                    <i class="fas fa-eye"></i> View
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteClass('{{ cancer_type }}', '{{ class_name }}')">
+                                    <i class="fas fa-trash"></i> Clear
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Upload Modal -->
+<div class="modal fade" id="uploadModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Upload Training Images</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Cancer Type</label>
+                        <select class="form-select" id="cancer_type" required>
+                            <option value="">Select...</option>
+                            <option value="brain">Brain Tumor</option>
+                            <option value="lung">Lung Cancer</option>
+                            <option value="breast">Breast Cancer</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Class Label</label>
+                        <input type="text" class="form-control" id="class_label" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Split Type</label>
+                        <select class="form-select" id="split_type" required>
+                            <option value="train">Training Set</option>
+                            <option value="validation">Validation Set</option>
+                            <option value="test">Test Set</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Select Images</label>
+                        <input type="file" class="form-control" id="images" multiple accept="image/*" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('uploadForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('cancer_type', document.getElementById('cancer_type').value);
+    formData.append('class_label', document.getElementById('class_label').value);
+    formData.append('split_type', document.getElementById('split_type').value);
+    const files = document.getElementById('images').files;
+    for(let i = 0; i < files.length; i++) {
+        formData.append('images', files[i]);
+    }
+    
+    fetch('/api/dataset/upload', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+        location.reload();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Upload failed');
+    });
+});
+
+function viewImages(cancerType, className) {
+    alert(`Viewing images for ${cancerType} - ${className}`);
+}
+
+function deleteClass(cancerType, className) {
+    if(confirm(`Delete all images for ${cancerType} - ${className}?`)) {
+        fetch(`/api/dataset/delete/${cancerType}/${className}`, {
+            method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            location.reload();
+        });
+    }
+}
+</script>
+{% endblock %}

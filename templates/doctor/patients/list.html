@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}My Patients{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">
+            <i class="fas fa-users"></i> My Patients
+        </h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <a href="{{ url_for('doctor.add_patient') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add Patient
+            </a>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Patient ID</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Gender</th>
+                            <th>Contact</th>
+                            <th>Registered</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for patient in patients.items %}
+                        <tr>
+                            <td>{{ patient.patient_uid }}</a></td>
+                            <td>{{ patient.name }}</a></td>
+                            <td>{{ patient.age if patient.age else 'N/A' }}</a></td>
+                            <td>{{ patient.gender if patient.gender else 'N/A' }}</a></td>
+                            <td>{{ patient.contact_number if patient.contact_number else 'N/A' }}</a></td>
+                            <td>{% if patient.created_at %}{{ patient.created_at.strftime('%Y-%m-%d') }}{% else %}N/A{% endif %}</a></td>
+                            <td>
+                                <a href="{{ url_for('doctor.view_patient', patient_id=patient.id) }}" class="btn btn-sm btn-info">View</a>
+                                <a href="{{ url_for('doctor.edit_patient', patient_id=patient.id) }}" class="btn btn-sm btn-warning">Edit</a>
+                            </a>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="7" class="text-center">No patients found</a></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            {% if patients.pages > 1 %}
+            <nav>
+                <ul class="pagination justify-content-center">
+                    {% if patients.has_prev %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('doctor.patients', page=patients.prev_num) }}">Previous</a></li>
+                    {% endif %}
+                    {% for page_num in patients.iter_pages() %}
+                        {% if page_num %}
+                            <li class="page-item {% if page_num == patients.page %}active{% endif %}">
+                                <a class="page-link" href="{{ url_for('doctor.patients', page=page_num) }}">{{ page_num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if patients.has_next %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('doctor.patients', page=patients.next_num) }}">Next</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

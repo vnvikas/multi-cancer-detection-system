@@ -1,0 +1,325 @@
+/* Responsive Design for Multi-Cancer Detection System */
+
+/* Tablet Styles (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+    /* Navigation */
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+    
+    /* Dashboard Cards */
+    .stat-card .stat-value {
+        font-size: 1.5rem;
+    }
+    
+    /* Tables */
+    .table-responsive {
+        font-size: 0.9rem;
+    }
+    
+    /* Patient Cards */
+    .patient-card .card-body {
+        padding: 15px;
+    }
+    
+    /* Charts */
+    .chart-container {
+        margin-bottom: 20px;
+    }
+}
+
+/* Mobile Styles (max 767px) */
+@media (max-width: 767px) {
+    /* Navigation */
+    .navbar {
+        padding: 10px;
+    }
+    
+    .navbar-brand {
+        font-size: 1rem;
+    }
+    
+    .navbar-toggler {
+        padding: 5px 10px;
+    }
+    
+    /* Dashboard */
+    .dashboard-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .dashboard-header h1 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
+    
+    /* Stats Cards */
+    .stat-card {
+        margin-bottom: 15px;
+    }
+    
+    .stat-card .stat-value {
+        font-size: 1.2rem;
+    }
+    
+    .stat-card .stat-icon {
+        font-size: 2rem;
+    }
+    
+    /* Tables */
+    .table-responsive {
+        font-size: 0.8rem;
+    }
+    
+    .table thead th,
+    .table tbody td {
+        padding: 8px;
+    }
+    
+    /* Buttons */
+    .btn {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .btn-lg {
+        padding: 10px 16px;
+        font-size: 1rem;
+    }
+    
+    /* Forms */
+    .form-control,
+    .form-select {
+        font-size: 0.9rem;
+    }
+    
+    /* Patient Cards */
+    .patient-card {
+        margin-bottom: 15px;
+    }
+    
+    .patient-card .card-title {
+        font-size: 1rem;
+    }
+    
+    /* Modal */
+    .modal-dialog {
+        margin: 10px;
+    }
+    
+    .modal-body {
+        padding: 15px;
+    }
+    
+    /* Upload Area */
+    .upload-area {
+        padding: 20px;
+    }
+    
+    .upload-area i {
+        font-size: 2rem;
+    }
+    
+    /* Charts */
+    .chart-container {
+        padding: 10px;
+    }
+    
+    /* Footer */
+    footer {
+        font-size: 0.8rem;
+        text-align: center;
+    }
+    
+    /* Login Page */
+    .login-card {
+        margin: 20px;
+    }
+    
+    .login-card h3 {
+        font-size: 1.3rem;
+    }
+}
+
+/* Small Mobile (max 480px) */
+@media (max-width: 480px) {
+    /* Hide some elements on very small screens */
+    .hide-on-mobile {
+        display: none;
+    }
+    
+    /* Stack buttons */
+    .btn-group {
+        flex-direction: column;
+    }
+    
+    .btn-group .btn {
+        margin-bottom: 5px;
+        border-radius: 5px !important;
+    }
+    
+    /* Adjust font sizes */
+    body {
+        font-size: 14px;
+    }
+    
+    h1 {
+        font-size: 1.3rem;
+    }
+    
+    h2 {
+        font-size: 1.2rem;
+    }
+    
+    h3 {
+        font-size: 1.1rem;
+    }
+    
+    /* Card padding */
+    .card-body {
+        padding: 12px;
+    }
+    
+    .card-header {
+        padding: 10px 12px;
+    }
+    
+    /* Form spacing */
+    .form-group {
+        margin-bottom: 12px;
+    }
+    
+    /* Progress bars */
+    .progress {
+        height: 6px;
+    }
+    
+    /* Badges */
+    .badge {
+        font-size: 0.7rem;
+        padding: 3px 6px;
+    }
+}
+
+/* Tablet Landscape */
+@media (min-width: 1025px) and (max-width: 1366px) {
+    .container-fluid {
+        padding: 0 20px;
+    }
+    
+    .stat-card .stat-value {
+        font-size: 1.8rem;
+    }
+}
+
+/* Print Styles */
+@media print {
+    /* Hide navigation and buttons */
+    .navbar,
+    .btn-toolbar,
+    footer,
+    .no-print {
+        display: none !important;
+    }
+    
+    /* Adjust margins */
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    
+    .container-fluid {
+        padding: 0;
+        margin: 0;
+    }
+    
+    /* Card styling */
+    .card {
+        border: 1px solid #ddd;
+        box-shadow: none;
+        break-inside: avoid;
+    }
+    
+    /* Table styling */
+    .table {
+        border: 1px solid #ddd;
+    }
+    
+    .table th,
+    .table td {
+        border: 1px solid #ddd;
+    }
+    
+    /* Images */
+    img {
+        max-width: 100%;
+        page-break-inside: avoid;
+    }
+    
+    /* Colors */
+    * {
+        color: black !important;
+        background: white !important;
+    }
+    
+    /* Ensure all content is visible */
+    .collapse {
+        display: block !important;
+    }
+}
+
+/* High DPI Screens */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .navbar-brand {
+        font-weight: 500;
+    }
+    
+    .btn {
+        font-weight: 500;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1a1a2e;
+        color: #eee;
+    }
+    
+    .card {
+        background-color: #16213e;
+        border-color: #0f3460;
+    }
+    
+    .table {
+        color: #eee;
+    }
+    
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+    
+    .form-control,
+    .form-select {
+        background-color: #0f3460;
+        border-color: #1a1a2e;
+        color: #eee;
+    }
+    
+    .form-control:focus,
+    .form-select:focus {
+        background-color: #1a1a2e;
+        color: #eee;
+    }
+}
+
+/* Accessibility - Reduce Motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

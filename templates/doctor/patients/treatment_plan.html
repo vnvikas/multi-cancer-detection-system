@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Create Treatment Plan{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-prescription-bottle"></i> Create Treatment Plan
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <h5>Patient: {{ patient.name }}</h5>
+                    <hr>
+                    
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="prediction_id" class="form-label">Based on Prediction</label>
+                            <select class="form-select" id="prediction_id" name="prediction_id" required>
+                                <option value="">Select prediction...</option>
+                                {% for pred in predictions %}
+                                <option value="{{ pred.id }}">
+                                    {{ pred.created_at.strftime('%Y-%m-%d') }} - {{ pred.cancer_type }} ({{ pred.cancer_subtype }}) - {{ "%.1f"|format(pred.confidence_score * 100) }}% confidence
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="treatment_type" class="form-label">Treatment Type</label>
+                            <select class="form-select" id="treatment_type" name="treatment_type" required>
+                                <option value="">Select treatment type...</option>
+                                <option value="Surgery">Surgery</option>
+                                <option value="Chemotherapy">Chemotherapy</option>
+                                <option value="Radiation Therapy">Radiation Therapy</option>
+                                <option value="Immunotherapy">Immunotherapy</option>
+                                <option value="Targeted Therapy">Targeted Therapy</option>
+                                <option value="Hormone Therapy">Hormone Therapy</option>
+                                <option value="Combination">Combination Therapy</option>
+                            </select>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="start_date" class="form-label">Start Date</label>
+                                <input type="date" class="form-control" id="start_date" name="start_date">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="end_date" class="form-label">End Date</label>
+                                <input type="date" class="form-control" id="end_date" name="end_date">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="medications" class="form-label">Medications</label>
+                            <textarea class="form-control" id="medications" name="medications" rows="3" placeholder="List all medications with dosages..."></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="dosage" class="form-label">Dosage Instructions</label>
+                            <textarea class="form-control" id="dosage" name="dosage" rows="2" placeholder="Detailed dosage instructions..."></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="follow_up_frequency" class="form-label">Follow-up Frequency</label>
+                            <select class="form-select" id="follow_up_frequency" name="follow_up_frequency">
+                                <option value="">Select frequency...</option>
+                                <option value="Weekly">Weekly</option>
+                                <option value="Bi-weekly">Bi-weekly</option>
+                                <option value="Monthly">Monthly</option>
+                                <option value="Quarterly">Quarterly</option>
+                                <option value="Every 6 months">Every 6 months</option>
+                                <option value="Yearly">Yearly</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="special_instructions" class="form-label">Special Instructions</label>
+                            <textarea class="form-control" id="special_instructions" name="special_instructions" rows="3" placeholder="Any special instructions for the patient..."></textarea>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Create Treatment Plan
+                            </button>
+                            <a href="{{ url_for('doctor.view_patient', patient_id=patient.id) }}" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

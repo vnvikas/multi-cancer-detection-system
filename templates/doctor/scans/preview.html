@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Scan Preview{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0"><i class="fas fa-image"></i> Scan Preview</h4>
+        </div>
+        <div class="card-body text-center">
+            <img src="/{{ scan.image_path }}" class="img-fluid rounded" alt="Scan Preview" style="max-height: 500px;">
+            
+            <div class="mt-4">
+                <p><strong>Patient:</strong> {{ patient.name }}</p>
+                <p><strong>Scan ID:</strong> {{ scan.scan_id }}</p>
+                <p><strong>Cancer Type:</strong> {{ scan.cancer_type|title if scan.cancer_type else 'N/A' }}</p>
+                <p><strong>Uploaded:</strong> {% if scan.uploaded_at %}{{ scan.uploaded_at.strftime('%Y-%m-%d %H:%M') }}{% else %}N/A{% endif %}</p>
+            </div>
+            
+            <div class="mt-4">
+                <a href="{{ url_for('doctor.predict_scan', scan_id=scan.id) }}" class="btn btn-success btn-lg">
+                    <i class="fas fa-microscope"></i> Start Analysis
+                </a>
+                <a href="{{ url_for('doctor.scan_gallery') }}" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-arrow-left"></i> Back to Gallery
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

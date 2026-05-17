@@ -1,0 +1,99 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+pythonenv*
+
+# Virtual Environment
+venv/
+venv/
+env/
+ENV/
+.env
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+*.sql
+!database/schema.sql
+
+# Uploaded Files
+uploads/
+uploads/*
+!uploads/.gitkeep
+
+# Reports
+reports/
+reports/*
+!reports/.gitkeep
+
+# Logs
+logs/
+*.log
+!logs/.gitkeep
+
+# Models (too large for GitHub)
+models/
+*.h5
+*.hdf5
+*.pkl
+*.pb
+*.ckpt
+*.weights
+
+# Dataset (large files)
+dataset/
+!dataset/.gitkeep
+
+# Environment Variables
+.env
+.env.local
+.env.production
+.env.development
+
+# Secret Keys
+*.pem
+*.key
+*.crt
+secrets/
+config/secrets.py
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb
+
+# Docker
+*.log
+*.pid
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Backup files
+*.bak
+*.backup
+backups/

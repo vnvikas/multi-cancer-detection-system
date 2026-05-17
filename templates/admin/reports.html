@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}All Reports{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="mb-4">All Reports</h2>
+    
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Report ID</th>
+                            <th>Patient</th>
+                            <th>Doctor</th>
+                            <th>Cancer Type</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for prediction in predictions %}
+                        <tr>
+                            <td>{% if prediction.created_at %}{{ prediction.created_at.strftime('%Y-%m-%d') }}{% else %}N/A{% endif %}</td>
+                            <td>{{ prediction.prediction_id if prediction.prediction_id else 'N/A' }}</td>
+                            <td>{{ prediction.scan.patient.name if prediction.scan and prediction.scan.patient else 'N/A' }}</td>
+                            <td>{{ prediction.scan.patient.doctor.name if prediction.scan and prediction.scan.patient and prediction.scan.patient.doctor else 'N/A' }}</td>
+                            <td>{{ prediction.cancer_type if prediction.cancer_type else 'N/A' }}</td>
+                            <td>{% if prediction.doctor_verified %}<span class="badge bg-success">Verified</span>{% else %}<span class="badge bg-warning">Pending</span>{% endif %}</td>
+                            <td><a href="#" class="btn btn-sm btn-info">View</a></td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="7" class="text-center">No reports found</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

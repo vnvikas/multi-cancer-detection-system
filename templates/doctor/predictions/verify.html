@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}Verify Prediction{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header bg-warning">
+                    <h4 class="mb-0"><i class="fas fa-check-circle"></i> Verify AI Prediction</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Patient Info -->
+                    <div class="alert alert-info">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong>Patient:</strong> {{ patient.name }}<br>
+                                <strong>Patient ID:</strong> {{ patient.patient_uid }}
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Scan ID:</strong> {{ scan.scan_id }}<br>
+                                <strong>Cancer Type:</strong> {{ scan.cancer_type|title if scan.cancer_type else 'N/A' }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- AI Prediction Results -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">AI Prediction Results</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Cancer Type:</strong> {{ prediction.cancer_type if prediction.cancer_type else 'N/A' }}</p>
+                                    <p><strong>Subtype:</strong> {{ prediction.cancer_subtype if prediction.cancer_subtype else 'N/A' }}</p>
+                                    <p><strong>Stage:</strong> {{ prediction.cancer_stage if prediction.cancer_stage else 'N/A' }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Confidence:</strong> {{ "%.1f"|format(prediction.confidence_score * 100) if prediction.confidence_score else 'N/A' }}%</p>
+                                    <p><strong>Risk Score:</strong> {{ prediction.risk_score if prediction.risk_score else 'N/A' }}%</p>
+                                    <p><strong>Survival Rate:</strong> {{ prediction.survival_rate if prediction.survival_rate else 'N/A' }}%</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Verification Form -->
+                    <form method="POST">
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Is the AI prediction correct?</label>
+                            <div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="is_correct" id="correctYes" value="true" required>
+                                    <label class="form-check-label" for="correctYes">
+                                        <i class="fas fa-check-circle text-success"></i> Yes, correct
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="is_correct" id="correctNo" value="false" required>
+                                    <label class="form-check-label" for="correctNo">
+                                        <i class="fas fa-times-circle text-danger"></i> No, needs correction
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="correctionSection" style="display: none;">
+                            <div class="alert alert-warning">
+                                <i class="fas fa-edit"></i> Please provide the correct information
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Correct Cancer Type</label>
+                                    <select class="form-select" name="correct_cancer_type">
+                                        <option value="">Select...</option>
+                                        <option value="Brain Tumor">Brain Tumor</option>
+                                        <option value="Lung Cancer">Lung Cancer</option>
+                                        <option value="Breast Cancer">Breast Cancer</option>
+                                        <option value="No Cancer">No Cancer</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Correct Subtype</label>
+                                    <input type="text" class="form-control" name="correct_subtype" placeholder="e.g., Glioma, Adenocarcinoma">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Correct Stage</label>
+                                    <select class="form-select" name="correct_stage">
+                                        <option value="">Select...</option>
+                                        <option value="Stage 0">Stage 0</option>
+                                        <option value="Stage I">Stage I</option>
+                                        <option value="Stage II">Stage II</option>
+                                        <option value="Stage III">Stage III</option>
+                                        <option value="Stage IV">Stage IV</option>
+                                        <option value="Grade I">Grade I</option>
+                                        <option value="Grade II">Grade II</option>
+                                        <option value="Grade III">Grade III</option>
+                                        <option value="Grade IV">Grade IV</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Doctor's Notes / Clinical Findings</label>
+                            <textarea class="form-control" name="doctor_notes" rows="4" 
+                                      placeholder="Enter your clinical observations, additional findings, or comments..."></textarea>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-save"></i> Submit Verification
+                            </button>
+                            <a href="{{ url_for('doctor.view_prediction', prediction_id=prediction.id) }}" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Show/hide correction fields based on radio selection
+const radioYes = document.getElementById('correctYes');
+const radioNo = document.getElementById('correctNo');
+const correctionSection = document.getElementById('correctionSection');
+
+radioYes.addEventListener('change', function() {
+    if(this.checked) {
+        correctionSection.style.display = 'none';
+    }
+});
+
+radioNo.addEventListener('change', function() {
+    if(this.checked) {
+        correctionSection.style.display = 'block';
+    }
+});
+</script>
+{% endblock %}

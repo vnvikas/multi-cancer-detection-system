@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Model Performance Statistics{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">
+            <i class="fas fa-chart-bar"></i> Model Performance Statistics
+        </h1>
+    </div>
+    
+    <!-- Model Cards -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Brain Tumor Model</h5>
+                </div>
+                <div class="card-body">
+                    {% if latest_brain %}
+                    <table class="table table-sm">
+                        <tr><th>Accuracy:</th><td>{{ "%.2f"|format(latest_brain.accuracy * 100) if latest_brain.accuracy else 'N/A' }}%</td></tr>
+                        <tr><th>Precision:</th><td>{{ "%.2f"|format(latest_brain.precision_val * 100) if latest_brain.precision_val else 'N/A' }}%</td></tr>
+                        <tr><th>Recall:</th><td>{{ "%.2f"|format(latest_brain.recall_val * 100) if latest_brain.recall_val else 'N/A' }}%</td></tr>
+                        <tr><th>F1 Score:</th><td>{{ "%.2f"|format(latest_brain.f1_score * 100) if latest_brain.f1_score else 'N/A' }}%</td></tr>
+                        <tr><th>AUC:</th><td>{{ "%.2f"|format(latest_brain.auc_score * 100) if latest_brain.auc_score else 'N/A' }}%</td></tr>
+                        <tr><th>Version:</th><td>{{ latest_brain.model_version if latest_brain.model_version else 'N/A' }}</td></tr>
+                    </table>
+                    {% else %}
+                    <p class="text-muted">Model not trained yet</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Lung Cancer Model</h5>
+                </div>
+                <div class="card-body">
+                    {% if latest_lung %}
+                    <table class="table table-sm">
+                        <tr><th>Accuracy:</th><td>{{ "%.2f"|format(latest_lung.accuracy * 100) if latest_lung.accuracy else 'N/A' }}%</td></tr>
+                        <tr><th>Precision:</th><td>{{ "%.2f"|format(latest_lung.precision_val * 100) if latest_lung.precision_val else 'N/A' }}%</td></tr>
+                        <tr><th>Recall:</th><td>{{ "%.2f"|format(latest_lung.recall_val * 100) if latest_lung.recall_val else 'N/A' }}%</td></tr>
+                        <tr><th>F1 Score:</th><td>{{ "%.2f"|format(latest_lung.f1_score * 100) if latest_lung.f1_score else 'N/A' }}%</td></tr>
+                        <tr><th>Version:</th><td>{{ latest_lung.model_version if latest_lung.model_version else 'N/A' }}</td></tr>
+                    </table>
+                    {% else %}
+                    <p class="text-muted">Model not trained yet</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-warning text-white">
+                    <h5 class="mb-0">Breast Cancer Model</h5>
+                </div>
+                <div class="card-body">
+                    {% if latest_breast %}
+                    <table class="table table-sm">
+                        <tr><th>Accuracy:</th><td>{{ "%.2f"|format(latest_breast.accuracy * 100) if latest_breast.accuracy else 'N/A' }}%</td></tr>
+                        <tr><th>Precision:</th><td>{{ "%.2f"|format(latest_breast.precision_val * 100) if latest_breast.precision_val else 'N/A' }}%</td></tr>
+                        <tr><th>Recall:</th><td>{{ "%.2f"|format(latest_breast.recall_val * 100) if latest_breast.recall_val else 'N/A' }}%</td></tr>
+                        <tr><th>F1 Score:</th><td>{{ "%.2f"|format(latest_breast.f1_score * 100) if latest_breast.f1_score else 'N/A' }}%</td></tr>
+                        <tr><th>Version:</th><td>{{ latest_breast.model_version if latest_breast.model_version else 'N/A' }}</td></tr>
+                    </table>
+                    {% else %}
+                    <p class="text-muted">Model not trained yet</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Training History -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Training History</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <table>
+                            <th>Date</th>
+                            <th>Model</th>
+                            <th>Version</th>
+                            <th>Accuracy</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for model in models %}
+                        <tr>
+                            <td>{% if model.created_at %}{{ model.created_at.strftime('%Y-%m-%d %H:%M') }}{% else %}N/A{% endif %}</td>
+                            <td>{{ model.model_name if model.model_name else 'N/A' }}</td>
+                            <td>{{ model.model_version if model.model_version else 'N/A' }}</td>
+                            <td>{{ "%.2f"|format(model.accuracy * 100) if model.accuracy else 'N/A' }}%</td>
+                            <td>{% if model.is_active %}<span class="badge bg-success">Active</span>{% else %}<span class="badge bg-secondary">Archived</span>{% endif %}</td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="5" class="text-center">No training history available</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Retrain Models{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-sync-alt"></i> Retrain AI Models
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> Retraining models can take several minutes to hours depending on dataset size and hardware.
+                    </div>
+                    
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="cancer_type" class="form-label">Select Model to Retrain</label>
+                            <select class="form-select" id="cancer_type" name="cancer_type" required>
+                                <option value="">Select cancer type...</option>
+                                <option value="brain">Brain Tumor Model</option>
+                                <option value="lung">Lung Cancer Model</option>
+                                <option value="breast">Breast Cancer Model</option>
+                                <option value="all">All Models</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Training Configuration</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="use_augmentation" name="use_augmentation" checked>
+                                <label class="form-check-label" for="use_augmentation">
+                                    Use Data Augmentation
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="use_gpu" name="use_gpu">
+                                <label class="form-check-label" for="use_gpu">
+                                    Use GPU (if available)
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="epochs" class="form-label">Number of Epochs</label>
+                            <input type="number" class="form-control" id="epochs" name="epochs" value="50" min="10" max="200">
+                            <div class="form-text">More epochs may improve accuracy but take longer</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="batch_size" class="form-label">Batch Size</label>
+                            <select class="form-select" id="batch_size" name="batch_size">
+                                <option value="16">16 (Low memory)</option>
+                                <option value="32" selected>32 (Recommended)</option>
+                                <option value="64">64 (High memory)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <strong>Warning:</strong> Retraining will replace the current model. Make sure you have a backup if needed.
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg" onclick="return confirm('Are you sure you want to retrain the selected model? This may take some time.')">
+                                <i class="fas fa-play"></i> Start Retraining
+                            </button>
+                            <a href="{{ url_for('admin.model_stats') }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back to Statistics
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-chart-line"></i> Training Tips</h5>
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li>Ensure you have sufficient training data (minimum 1000 images per class)</li>
+                        <li>Higher epochs may lead to overfitting - use early stopping</li>
+                        <li>Data augmentation helps improve model generalization</li>
+                        <li>GPU significantly reduces training time (from hours to minutes)</li>
+                        <li>Monitor training logs for accuracy and loss trends</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

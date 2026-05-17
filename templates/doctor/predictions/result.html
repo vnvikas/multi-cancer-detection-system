@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Prediction Results{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header bg-success text-white">
+            <h3 class="mb-0"><i class="fas fa-chart-line"></i> AI Prediction Results</h3>
+        </div>
+        <div class="card-body">
+            <!-- Patient Info -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h5>Patient Information</h5>
+                    <p>
+                        <strong>Name:</strong> {{ patient.name }}<br>
+                        <strong>Patient ID:</strong> {{ patient.patient_uid }}<br>
+                        <strong>Age/Gender:</strong> {{ patient.age if patient.age else 'N/A' }}/{{ patient.gender if patient.gender else 'N/A' }}
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <h5>Scan Information</h5>
+                    <p>
+                        <strong>Scan ID:</strong> {{ scan.scan_id }}<br>
+                        <strong>Cancer Type:</strong> {{ scan.cancer_type|title if scan.cancer_type else 'N/A' }}<br>
+                        <strong>Scan Date:</strong> {% if scan.uploaded_at %}{{ scan.uploaded_at.strftime('%Y-%m-%d %H:%M') }}{% else %}N/A{% endif %}
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Prediction Results -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Detection Results</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table">
+                                <tr><th>Cancer Type:</th><td><strong>{{ prediction.cancer_type if prediction.cancer_type else 'N/A' }}</strong></a></td>
+                                <tr><th>Subtype:</th><td>{{ prediction.cancer_subtype if prediction.cancer_subtype else 'N/A' }}</a></td>
+                                <tr><th>Stage:</th><td>{{ prediction.cancer_stage if prediction.cancer_stage else 'N/A' }}</a></a></td>
+                                <tr><th>Confidence:</th><td>{{ "%.1f"|format(prediction.confidence_score * 100) if prediction.confidence_score else 'N/A' }}%</a></a></td>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-header bg-info text-white">
+                            <h5 class="mb-0">Risk Assessment</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table">
+                                <tr><th>Risk Score:</th><td><span class="badge bg-{{ 'danger' if prediction.risk_score and prediction.risk_score > 70 else 'warning' if prediction.risk_score and prediction.risk_score > 30 else 'success' }} fs-6">{{ prediction.risk_score if prediction.risk_score else 'N/A' }}%</span></a></td>
+                                <tr><th>Survival Rate:</th><td>{{ prediction.survival_rate if prediction.survival_rate else 'N/A' }}%</a></a></a></td>
+                                <tr><th>Metastasis:</th><td>{{ prediction.metastasis_probability if prediction.metastasis_probability else 'N/A' }}%</a></a></a></td>
+                                <tr><th>Treatment Response:</th><td>{{ prediction.treatment_response_prediction if prediction.treatment_response_prediction else 'N/A' }}</a></a></a></a></td>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="text-center mt-4">
+                {% if not prediction.doctor_verified %}
+                <a href="{{ url_for('doctor.verify_prediction', prediction_id=prediction.id) }}" class="btn btn-warning btn-lg">
+                    <i class="fas fa-check-circle"></i> Verify Prediction
+                </a>
+                {% endif %}
+                <a href="{{ url_for('doctor.generate_report', prediction_id=prediction.id) }}" class="btn btn-success btn-lg">
+    <i class="fas fa-file-pdf"></i> Generate Report
+</a>
+                <a href="{{ url_for('doctor.view_patient', patient_id=patient.id) }}" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-arrow-left"></i> Back to Patient
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

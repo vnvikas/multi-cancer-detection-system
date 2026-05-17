@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Scan{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-upload"></i> Upload Medical Scan</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label class="form-label">Select Patient</label>
+                            <select class="form-select" name="patient_id" required>
+                                <option value="">Choose patient...</option>
+                                {% for patient in patients %}
+                                <option value="{{ patient.id }}">{{ patient.name }} ({{ patient.patient_uid }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Cancer Type</label>
+                            <select class="form-select" name="cancer_type" required>
+                                <option value="">Select...</option>
+                                <option value="brain">Brain Tumor (MRI)</option>
+                                <option value="lung">Lung Cancer (CT Scan)</option>
+                                <option value="breast">Breast Cancer (Mammogram)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Scan Image</label>
+                            <input type="file" class="form-control" name="scan_image" accept="image/*" required>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Upload and Analyze</button>
+                            <a href="{{ url_for('doctor.dashboard') }}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

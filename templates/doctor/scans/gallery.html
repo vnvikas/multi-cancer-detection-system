@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Scan Gallery{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">
+            <i class="fas fa-images"></i> Scan Gallery
+        </h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <a href="{{ url_for('doctor.upload_scan') }}" class="btn btn-primary">
+                <i class="fas fa-upload"></i> Upload New Scan
+            </a>
+        </div>
+    </div>
+    
+    <!-- Filters -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label">Patient</label>
+                    <select class="form-select" id="patient_filter">
+                        <option value="all">All Patients</option>
+                        {% for patient in current_user.patients %}
+                        <option value="{{ patient.id }}">{{ patient.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Cancer Type</label>
+                    <select class="form-select" id="type_filter">
+                        <option value="all">All Types</option>
+                        <option value="brain">Brain Tumor</option>
+                        <option value="lung">Lung Cancer</option>
+                        <option value="breast">Breast Cancer</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" id="status_filter">
+                        <option value="all">All</option>
+                        <option value="analyzed">Analyzed</option>
+                        <option value="pending">Pending Analysis</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Gallery Grid -->
+    <div class="row" id="galleryGrid">
+        {% for scan in current_user.uploaded_scans %}
+        <div class="col-md-3 mb-4 scan-item" data-patient="{{ scan.patient_id }}" data-type="{{ scan.cancer_type }}" data-status="{{ 'analyzed' if scan.predictions else 'pending' }}">
+            <div class="card h-100">
+                <img src="{{ url_for('static', filename='uploads/' + scan.image_path.split('/')[-1]) }}" class="card-img-top" alt="Scan" style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                    <h6 class="card-title">{{ scan.patient.name }}</h6>
+                    <p class="card-text">
+                        <small class="text-muted">
+                            <i class="fas fa-microscope"></i> {{ scan.cancer_type|title }}<br>
+                            <i class="fas fa-calendar"></i> {{ scan.uploaded_at.strftime('%Y-%m-%d') }}
+                        </small>
+                    </p>
+                    {% if scan.predictions %}
+                    <span class="badge bg-success">Analyzed</span>
+                    {% else %}
+                    <span class="badge bg-warning">Pending</span>
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    {% if scan.predictions %}
+                    <a href="{{ url_for('doctor.view_prediction', prediction_id=scan.predictions[0].id) }}" class="btn btn-sm btn-info w-100">
+                        <i class="fas fa-chart-line"></i> View Results
+                    </a>
+                    {% else %}
+                    <a href="{{ url_for('doctor.predict_scan', scan_id=scan.id) }}" class="btn btn-sm btn-primary w-100">
+                        <i class="fas fa-microscope"></i> Analyze
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+document.getElementById('patient_filter').addEventListener('change', filterGallery);
+document.getElementById('type_filter').addEventListener('change', filterGallery);
+document.getElementById('status_filter').addEventListener('change', filterGallery);
+
+function filterGallery() {
+    const patientFilter = document.getElementById('patient_filter').value;
+    const typeFilter = document.getElementById('type_filter').value;
+    const statusFilter = document.getElementById('status_filter').value;
+    
+    const items = document.querySelectorAll('.scan-item');
+    
+    items.forEach(item => {
+        let show = true;
+        
+        if (patientFilter !== 'all' && item.dataset.patient !== patientFilter) {
+            show = false;
+        }
+        if (typeFilter !== 'all' && item.dataset.type !== typeFilter) {
+            show = false;
+        }
+        if (statusFilter !== 'all' && item.dataset.status !== statusFilter) {
+            show = false;
+        }
+        
+        item.style.display = show ? '' : 'none';
+    });
+}
+</script>
+{% endblock %}
